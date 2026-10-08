@@ -1,0 +1,12 @@
+# Generated build directories
+/build/
+
+
+# Compiled binaries and object files
+*.o
+*.a
+*.so
+*.exe
+
+# Editor files
+.vscode/

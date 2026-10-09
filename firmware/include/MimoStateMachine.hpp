@@ -15,9 +15,11 @@ enum class MimoEvent {
     SleepRequested
 };
 
+const char* stateToString(MimoState state);
+
 class MimoStateMachine {
     public:
-        void handleEvent(MimoEvent event);
+        bool handleEvent(MimoEvent event);
         MimoState getCurrentState() const;
 
     private:

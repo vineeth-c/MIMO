@@ -42,7 +42,33 @@ int main() {
     // wakeword -> listening
     sleepTest.handleEvent(MimoEvent::WakeWordDetected);
     assert(sleepTest.getCurrentState() == MimoState::Listening);
-    
+
+    MimoStateMachine validationTest;
+
+    // valid event
+    bool accepted = validationTest.handleEvent(
+        MimoEvent::WakeWordDetected
+    );
+
+    assert(accepted == true);
+    assert(validationTest.getCurrentState() == MimoState::Listening);
+
+    // Invalid event while listening
+    accepted = validationTest.handleEvent(
+        MimoEvent::ProcessingComplete
+    );
+
+    assert(accepted == false);
+    assert(validationTest.getCurrentState() == MimoState::Listening);
+
+    // valid command
+    accepted = validationTest.handleEvent(
+        MimoEvent::CommandReceived
+    );
+
+    assert(accepted == true);
+    assert(validationTest.getCurrentState() == MimoState::Thinking);
+
     std::cout << "ALL MIMO state machine tests passed.\n";
     return 0;
 

@@ -1,48 +1,74 @@
 #include "MimoStateMachine.hpp"
 
-void MimoStateMachine::handleEvent(MimoEvent event) {
+bool MimoStateMachine::handleEvent(MimoEvent event) {
+    MimoState nextState = currentState;
+
     switch (currentState)
     {
         
         case MimoState::Idle:
             if (event == MimoEvent::WakeWordDetected)
             {
-                currentState = MimoState::Listening;
+                nextState = MimoState::Listening;
             }
             else if (event == MimoEvent::SleepRequested)
             {
-                currentState = MimoState::Sleeping;
+                nextState = MimoState::Sleeping;
             }
             break;
 
         case MimoState::Listening:
             if (event == MimoEvent::CommandReceived)
             {
-                currentState = MimoState::Thinking;
+                nextState = MimoState::Thinking;
             }
             else if (event == MimoEvent::Timeout)
             {
-                currentState = MimoState::Idle;
+                nextState = MimoState::Idle;
             }
             break;
         
         case MimoState::Thinking:
             if (event == MimoEvent::ProcessingComplete)
             {
-                currentState = MimoState::Idle;
+                nextState = MimoState::Idle;
             }
             break;
         
         case MimoState::Sleeping:
             if (event == MimoEvent::WakeWordDetected)
             {
-                currentState = MimoState::Listening;
+                nextState = MimoState::Listening;
             }
             break;
             
     }
+    if (nextState == currentState) {
+        return false;
+    }
+
+    currentState = nextState;
+    return true;
 }
 
 MimoState MimoStateMachine::getCurrentState() const {
     return currentState;
+}
+
+const char* stateToString(MimoState state) {
+    switch(state) {
+        case MimoState::Idle:
+            return "Idle";
+        
+        case MimoState::Listening:
+            return "Listening";
+
+        case MimoState::Thinking:
+            return "Thinking";
+        
+        case MimoState::Sleeping:
+            return "Sleeping";
+    }
+
+    return "Unknown";
 }

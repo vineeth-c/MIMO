@@ -1,0 +1,7 @@
+wake
+command
+complete
+sleep
+command
+wake
+exit

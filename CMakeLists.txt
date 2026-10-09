@@ -4,11 +4,33 @@ project(MIMO LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
+# shared firmware logic
+add_library(mimo_core
+    firmware/src/MimoStateMachine.cpp
+)
+
+target_include_directories(mimo_core PUBLIC
+    firmware/include
+)
+
+#MIMO simulator
 add_executable(mimo
     firmware/src/main.cpp
 )
 
+target_link_libraries(mimo PRIVATE mimo_core)
+
+# Automated tests
 enable_testing()
 
 add_test(NAME mimo_startup COMMAND mimo)
+
+add_executable(test_state_machine
+    tests/test_state_machine.cpp
+)
+
+target_link_libraries(test_state_machine PRIVATE mimo_core)
+
+add_test(NAME state_machine COMMAND test_state_machine)

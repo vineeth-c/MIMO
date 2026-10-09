@@ -9,6 +9,10 @@ void MimoStateMachine::handleEvent(MimoEvent event) {
             {
                 currentState = MimoState::Listening;
             }
+            else if (event == MimoEvent::SleepRequested)
+            {
+                currentState = MimoState::Sleeping;
+            }
             break;
 
         case MimoState::Listening:
@@ -30,6 +34,10 @@ void MimoStateMachine::handleEvent(MimoEvent event) {
             break;
         
         case MimoState::Sleeping:
+            if (event == MimoEvent::WakeWordDetected)
+            {
+                currentState = MimoState::Listening;
+            }
             break;
             
     }

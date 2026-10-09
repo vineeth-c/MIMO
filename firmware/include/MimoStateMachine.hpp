@@ -11,7 +11,8 @@ enum class MimoEvent {
     WakeWordDetected,
     CommandReceived,
     ProcessingComplete,
-    Timeout
+    Timeout,
+    SleepRequested
 };
 
 class MimoStateMachine {

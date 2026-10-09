@@ -29,6 +29,20 @@ int main() {
     mimo.handleEvent(MimoEvent::Timeout);
     assert(mimo.getCurrentState() == MimoState::Idle);
 
+    MimoStateMachine sleepTest;
+
+    // Idle -> sleeping
+    sleepTest.handleEvent(MimoEvent::SleepRequested);
+    assert(sleepTest.getCurrentState() == MimoState::Sleeping);
+
+    // command should be ignored while sleeping
+    sleepTest.handleEvent(MimoEvent::CommandReceived);
+    assert(sleepTest.getCurrentState() == MimoState::Sleeping);
+
+    // wakeword -> listening
+    sleepTest.handleEvent(MimoEvent::WakeWordDetected);
+    assert(sleepTest.getCurrentState() == MimoState::Listening);
+    
     std::cout << "ALL MIMO state machine tests passed.\n";
     return 0;
 
